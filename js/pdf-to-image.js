@@ -329,6 +329,8 @@ function verificarLinks() {
 
                     const shareElement = document.createElement('a');
                     shareElement.href = `https://api.whatsapp.com/send?text="Baixe o folheto do Apoio Entrega ${link}"`
+                    shareElement.target = '_blank'
+                    shareElement.style = 'justify-content: center;display: flex;'
                     const divShareButton = document.createElement('div');
                     divShareButton.className = 'lp-folheto--btn-whatsapp--download';
                     divShareButton.innerHTML = `
@@ -342,8 +344,8 @@ function verificarLinks() {
                     shareElement.appendChild(divShareButton)
 
                     // Adiciona o link ao container
-                    containerLinks.appendChild(linkElement);
                     containerLinks.appendChild(shareElement);
+                    containerLinks.appendChild(linkElement);
                 }
             });
         })
