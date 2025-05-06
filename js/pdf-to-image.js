@@ -332,7 +332,6 @@ function verificarLinks() {
                     shareElement.target = '_blank'
                     shareElement.style = 'justify-content: center;display: flex;'
                     const divShareButton = document.createElement('div');
-                    divShareButton.className = 'lp-folheto--btn-whatsapp--download';
                     divShareButton.innerHTML = `
                         <svg width="80" height="32" viewBox="0 0 80 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect x="1" y="0.5" width="78" height="31" rx="7.5" fill="#E12428"/>
