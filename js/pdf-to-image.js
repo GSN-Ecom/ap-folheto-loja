@@ -331,8 +331,7 @@ function verificarLinks() {
                     shareElement.href = `https://api.whatsapp.com/send?text="Baixe o folheto do Apoio Entrega ${link}"`
                     shareElement.target = '_blank'
                     shareElement.style = 'justify-content: center;display: flex;'
-                    const divShareButton = document.createElement('div');
-                    divShareButton.innerHTML = `
+                    shareElement.innerHTML = `
                         <svg width="80" height="32" viewBox="0 0 80 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect x="1" y="0.5" width="78" height="31" rx="7.5" fill="#E12428"/>
                             <rect x="1" y="0.5" width="78" height="31" rx="7.5" stroke="#E12428"/>
@@ -340,7 +339,7 @@ function verificarLinks() {
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M65.6277 19.1362L69.9002 15.8767C70.0688 15.7512 70.1667 15.5635 70.1667 15.3652C70.1667 15.1669 70.0688 14.9793 69.9002 14.8537L65.6277 11.5942C65.3998 11.4169 65.0809 11.3735 64.8059 11.4823C64.531 11.5911 64.3483 11.8331 64.3353 12.1057V13.3913C58.3372 12.4455 56.8333 17.3313 56.8333 20.0898C58.2248 17.9884 61.8305 14.1793 64.3353 17.3313V18.6204C64.3466 18.8938 64.5286 19.1373 64.8038 19.2471C65.0792 19.357 65.3992 19.3139 65.6277 19.1362Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     `;
-                    shareElement.appendChild(divShareButton)
+                    shareElement.appendChild(shareElement)
 
                     // Adiciona o link ao container
                     containerLinks.appendChild(shareElement);
