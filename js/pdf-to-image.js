@@ -1,475 +1,507 @@
 // Aguarda o carregamento do DOM
-document.addEventListener('DOMContentLoaded', function() {
-    carregarDadosFolheto();
-    carregarFolhetoCarrossel_1();
-    carregarFolhetoCarrossel_2();
-    carregarFolhetoCarrossel_3();
-    verificarConteudoVideoVT();
-    verificarConteudoCoupon();
-    criarCardsDeLojas();
-    carregarStores(); // Chamada para a nova função
+document.addEventListener("DOMContentLoaded", function () {
+  carregarDadosFolheto();
+  carregarFolhetoCarrossel_1();
+  carregarFolhetoCarrossel_2();
+  carregarFolhetoCarrossel_3();
+  verificarConteudoVideoVT();
+  verificarConteudoCoupon();
+  criarCardsDeLojas();
+  carregarStores(); // Chamada para a nova função
 });
 
 // Declare as constantes uma vez
-const SPREADSHEET_ID = '1VG50pLDcO4Kgi1RgMp-FOOuIxZlLgqaiNOOwlf368po';
-const API_KEY = 'AIzaSyDZnfHhFUOkVlhQB2lDDQNaVtXuYDVqWXU';
-const RANGE_DATA = 'page-content!B2'; // Para a função carregarDadosFolheto
-const RANGE_LINKS = 'page-content!B5:D5'; // Para os links na função verificarLinks
-const RANGE_STORES = 'stores!A3:F'; // Para a nova função carregarStores
-const RANGE_PAGES_FOLHETO = 'folhetoCarrossel_1!U4:X'; // Para a nova função carregarFolhetoCarrossel_1
-const RANGE_PAGES_FOLHETO_2 = 'folhetoCarrossel_2!U4:X'; // Para a nova função carregarFolhetoCarrossel_2
-const RANGE_PAGES_FOLHETO_3 = 'folhetoCarrossel_3!U4:X'; // Para a nova função carregarFolhetoCarrossel_3
+const SPREADSHEET_ID = "1VG50pLDcO4Kgi1RgMp-FOOuIxZlLgqaiNOOwlf368po";
+const API_KEY = "AIzaSyDZnfHhFUOkVlhQB2lDDQNaVtXuYDVqWXU";
+const RANGE_DATA = "page-content!B2"; // Para a função carregarDadosFolheto
+const RANGE_LINKS = "page-content!B5:D5"; // Para os links na função verificarLinks
+const RANGE_STORES = "stores!A3:F"; // Para a nova função carregarStores
+const RANGE_PAGES_FOLHETO = "folhetoCarrossel_1!U4:X"; // Para a nova função carregarFolhetoCarrossel_1
+const RANGE_PAGES_FOLHETO_2 = "folhetoCarrossel_2!U4:X"; // Para a nova função carregarFolhetoCarrossel_2
+const RANGE_PAGES_FOLHETO_3 = "folhetoCarrossel_3!U4:X"; // Para a nova função carregarFolhetoCarrossel_3
 
 // // Função para carregar os dados da planilha para a loja
 
 function carregarFolhetoCarrossel_1() {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_PAGES_FOLHETO}?key=${API_KEY}`;
-    const container = document.getElementById('container-carrosseis');
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_PAGES_FOLHETO}?key=${API_KEY}`;
+  const container = document.getElementById("container-carrosseis");
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            const rows = data.values;
-            
-            // Verifica se a célula U4 está vazia
-            if (!rows || rows.length === 0 || !rows[0] || rows[0][0] === "") {
-                container.style.display = 'none'; // Oculta o container se U4 estiver vazia
-                return;
-            }
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      const rows = data.values;
 
-            // Se U4 não está vazia, exibe o container e constrói o carrossel
-            container.style.display = 'block';
+      // Verifica se a célula U4 está vazia
+      if (!rows || rows.length === 0 || !rows[0] || rows[0][0] === "") {
+        container.style.display = "none"; // Oculta o container se U4 estiver vazia
+        return;
+      }
 
-            const carouselWrapper = document.createElement('div');
-            carouselWrapper.classList.add('slider-folheto-loja-fisica-sn');
+      // Se U4 não está vazia, exibe o container e constrói o carrossel
+      container.style.display = "block";
 
-            const scrollLeft = document.createElement('img');
-            scrollLeft.id = 'scrollLeft--carousel-position-1';
-            scrollLeft.classList.add('scrollLeft');
-            scrollLeft.src = 'imgs/nav-arrow-left.svg';
-            scrollLeft.alt = 'Mover para esquerda';
-            carouselWrapper.appendChild(scrollLeft);
+      const carouselWrapper = document.createElement("div");
+      carouselWrapper.classList.add("slider-folheto-loja-fisica-sn");
 
-            const carousel = document.createElement('div');
-            carousel.id = 'sn--folheto--carousel-position-1';
-            carousel.classList.add('cards-carrossel-folheto-loja-fisica-sn');
-            carouselWrapper.appendChild(carousel);
+      const scrollLeft = document.createElement("img");
+      scrollLeft.id = "scrollLeft--carousel-position-1";
+      scrollLeft.classList.add("scrollLeft");
+      scrollLeft.src = "imgs/nav-arrow-left.svg";
+      scrollLeft.alt = "Mover para esquerda";
+      carouselWrapper.appendChild(scrollLeft);
 
-            const scrollRight = document.createElement('img');
-            scrollRight.id = 'scrollRight--carousel-position-1';
-            scrollRight.classList.add('scrollRight');
-            scrollRight.src = 'imgs/nav-arrow-right.svg';
-            scrollRight.alt = 'Mover para a direita';
-            carouselWrapper.appendChild(scrollRight);
+      const carousel = document.createElement("div");
+      carousel.id = "sn--folheto--carousel-position-1";
+      carousel.classList.add("cards-carrossel-folheto-loja-fisica-sn");
+      carouselWrapper.appendChild(carousel);
 
-            container.appendChild(carouselWrapper);
+      const scrollRight = document.createElement("img");
+      scrollRight.id = "scrollRight--carousel-position-1";
+      scrollRight.classList.add("scrollRight");
+      scrollRight.src = "imgs/nav-arrow-right.svg";
+      scrollRight.alt = "Mover para a direita";
+      carouselWrapper.appendChild(scrollRight);
 
-            for (let i = 0; i < rows.length; i++) {
-                const row = rows[i];
+      container.appendChild(carouselWrapper);
 
-                if (row.length === 0) break;
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
 
-                const imageContainer = document.createElement('div');
-                imageContainer.classList.add('image-pagina-folheto-loja-fisica-sn');
-                
-                const image = document.createElement('img');
-                image.classList.add('page-folheto-image');
-                image.src = row[0];
-                image.alt = row[1];
-                image.title = row[2];
-                image.loading = row[3];
+        if (row.length === 0) break;
 
-                // Adiciona o evento de clique para abrir o overlay
-                image.addEventListener('click', () => {
-                    abrirOverlay(image.src);
-                });
+        const imageContainer = document.createElement("div");
+        imageContainer.classList.add("image-pagina-folheto-loja-fisica-sn");
 
-                imageContainer.appendChild(image);
-                carousel.appendChild(imageContainer);
-            }
+        const image = document.createElement("img");
+        image.classList.add("page-folheto-image");
+        image.src = row[0];
+        image.alt = row[1];
+        image.title = row[2];
+        image.loading = row[3];
 
-            scrollLeft.addEventListener('click', () => {
-                carousel.scrollBy({ left: -200, behavior: 'smooth' });
-            });
+        // Adiciona o evento de clique para abrir o overlay
+        image.addEventListener("click", () => {
+          abrirOverlay(image.src);
+        });
 
-            scrollRight.addEventListener('click', () => {
-                carousel.scrollBy({ left: 200, behavior: 'smooth' });
-            });
-        })
-        .catch(error => console.error('Erro ao carregar as imagens do carrossel 1:', error));
+        imageContainer.appendChild(image);
+        carousel.appendChild(imageContainer);
+      }
+
+      scrollLeft.addEventListener("click", () => {
+        carousel.scrollBy({ left: -200, behavior: "smooth" });
+      });
+
+      scrollRight.addEventListener("click", () => {
+        carousel.scrollBy({ left: 200, behavior: "smooth" });
+      });
+    })
+    .catch((error) =>
+      console.error("Erro ao carregar as imagens do carrossel 1:", error)
+    );
 }
 
-
 function carregarFolhetoCarrossel_2() {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_PAGES_FOLHETO_2}?key=${API_KEY}`;
-const container = document.getElementById('container-carrosseis_2');
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_PAGES_FOLHETO_2}?key=${API_KEY}`;
+  const container = document.getElementById("container-carrosseis_2");
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            const rows = data.values;
-            
-            // Verifica se a célula U4 está vazia
-            if (!rows || rows.length === 0 || !rows[0] || rows[0][0] === "") {
-                container.style.display = 'none'; // Oculta o container se U4 estiver vazia
-                return;
-            }
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      const rows = data.values;
 
-            // Se U4 não está vazia, exibe o container e constrói o carrossel
-            container.style.display = 'block';
+      // Verifica se a célula U4 está vazia
+      if (!rows || rows.length === 0 || !rows[0] || rows[0][0] === "") {
+        container.style.display = "none"; // Oculta o container se U4 estiver vazia
+        return;
+      }
 
-            const carouselWrapper = document.createElement('div');
-            carouselWrapper.classList.add('slider-folheto-loja-fisica-sn');
+      // Se U4 não está vazia, exibe o container e constrói o carrossel
+      container.style.display = "block";
 
-            const scrollLeft = document.createElement('img');
-            scrollLeft.id = 'scrollLeft--carousel-position-2';
-            scrollLeft.classList.add('scrollLeft');
-            scrollLeft.src = 'imgs/nav-arrow-left.svg';
-            scrollLeft.alt = 'Mover para esquerda';
-            carouselWrapper.appendChild(scrollLeft);
+      const carouselWrapper = document.createElement("div");
+      carouselWrapper.classList.add("slider-folheto-loja-fisica-sn");
 
-            const carousel = document.createElement('div');
-            carousel.id = 'sn--folheto--carousel-position-2';
-            carousel.classList.add('cards-carrossel-folheto-loja-fisica-sn');
-            carouselWrapper.appendChild(carousel);
+      const scrollLeft = document.createElement("img");
+      scrollLeft.id = "scrollLeft--carousel-position-2";
+      scrollLeft.classList.add("scrollLeft");
+      scrollLeft.src = "imgs/nav-arrow-left.svg";
+      scrollLeft.alt = "Mover para esquerda";
+      carouselWrapper.appendChild(scrollLeft);
 
-            const scrollRight = document.createElement('img');
-            scrollRight.id = 'scrollRight--carousel-position-2';
-            scrollRight.classList.add('scrollRight');
-            scrollRight.src = 'imgs/nav-arrow-right.svg';
-            scrollRight.alt = 'Mover para a direita';
-            carouselWrapper.appendChild(scrollRight);
+      const carousel = document.createElement("div");
+      carousel.id = "sn--folheto--carousel-position-2";
+      carousel.classList.add("cards-carrossel-folheto-loja-fisica-sn");
+      carouselWrapper.appendChild(carousel);
 
-            container.appendChild(carouselWrapper);
+      const scrollRight = document.createElement("img");
+      scrollRight.id = "scrollRight--carousel-position-2";
+      scrollRight.classList.add("scrollRight");
+      scrollRight.src = "imgs/nav-arrow-right.svg";
+      scrollRight.alt = "Mover para a direita";
+      carouselWrapper.appendChild(scrollRight);
 
-            for (let i = 0; i < rows.length; i++) {
-                const row = rows[i];
+      container.appendChild(carouselWrapper);
 
-                if (row.length === 0) break;
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
 
-                const imageContainer = document.createElement('div');
-                imageContainer.classList.add('image-pagina-folheto-loja-fisica-sn');
-                
-                const image = document.createElement('img');
-                image.classList.add('page-folheto-image');
-                image.src = row[0];
-                image.alt = row[1];
-                image.title = row[2];
-                image.loading = row[3];
+        if (row.length === 0) break;
 
-                // Adicionar o evento de clique para abrir o overlay
-                image.addEventListener('click', () => {
-                    abrirOverlay(image.src);
-                });
+        const imageContainer = document.createElement("div");
+        imageContainer.classList.add("image-pagina-folheto-loja-fisica-sn");
 
-                imageContainer.appendChild(image);
-                carousel.appendChild(imageContainer);
-            }
+        const image = document.createElement("img");
+        image.classList.add("page-folheto-image");
+        image.src = row[0];
+        image.alt = row[1];
+        image.title = row[2];
+        image.loading = row[3];
 
-            scrollLeft.addEventListener('click', () => {
-                carousel.scrollBy({ left: -200, behavior: 'smooth' });
-            });
+        // Adicionar o evento de clique para abrir o overlay
+        image.addEventListener("click", () => {
+          abrirOverlay(image.src);
+        });
 
-            scrollRight.addEventListener('click', () => {
-                carousel.scrollBy({ left: 200, behavior: 'smooth' });
-            });
-        })
-        .catch(error => console.error('Erro ao carregar as imagens do carrossel 2:', error));
+        imageContainer.appendChild(image);
+        carousel.appendChild(imageContainer);
+      }
+
+      scrollLeft.addEventListener("click", () => {
+        carousel.scrollBy({ left: -200, behavior: "smooth" });
+      });
+
+      scrollRight.addEventListener("click", () => {
+        carousel.scrollBy({ left: 200, behavior: "smooth" });
+      });
+    })
+    .catch((error) =>
+      console.error("Erro ao carregar as imagens do carrossel 2:", error)
+    );
 }
 
 function carregarFolhetoCarrossel_3() {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_PAGES_FOLHETO_3}?key=${API_KEY}`;
-const container = document.getElementById('container-carrosseis_3');
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_PAGES_FOLHETO_3}?key=${API_KEY}`;
+  const container = document.getElementById("container-carrosseis_3");
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            const rows = data.values;
-            
-            // Verifica se a célula U4 está vazia
-            if (!rows || rows.length === 0 || !rows[0] || rows[0][0] === "") {
-                container.style.display = 'none'; // Oculta o container se U4 estiver vazia
-                return;
-            }
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      const rows = data.values;
 
-            // Se U4 não está vazia, exibe o container e constrói o carrossel
-            container.style.display = 'block';
+      // Verifica se a célula U4 está vazia
+      if (!rows || rows.length === 0 || !rows[0] || rows[0][0] === "") {
+        container.style.display = "none"; // Oculta o container se U4 estiver vazia
+        return;
+      }
 
-            const carouselWrapper = document.createElement('div');
-            carouselWrapper.classList.add('slider-folheto-loja-fisica-sn');
+      // Se U4 não está vazia, exibe o container e constrói o carrossel
+      container.style.display = "block";
 
-            const scrollLeft = document.createElement('img');
-            scrollLeft.id = 'scrollLeft--carousel-position-3';
-            scrollLeft.classList.add('scrollLeft');
-            scrollLeft.src = 'imgs/nav-arrow-left.svg';
-            scrollLeft.alt = 'Mover para esquerda';
-            carouselWrapper.appendChild(scrollLeft);
+      const carouselWrapper = document.createElement("div");
+      carouselWrapper.classList.add("slider-folheto-loja-fisica-sn");
 
-            const carousel = document.createElement('div');
-            carousel.id = 'sn--folheto--carousel-position-3';
-            carousel.classList.add('cards-carrossel-folheto-loja-fisica-sn');
-            carouselWrapper.appendChild(carousel);
+      const scrollLeft = document.createElement("img");
+      scrollLeft.id = "scrollLeft--carousel-position-3";
+      scrollLeft.classList.add("scrollLeft");
+      scrollLeft.src = "imgs/nav-arrow-left.svg";
+      scrollLeft.alt = "Mover para esquerda";
+      carouselWrapper.appendChild(scrollLeft);
 
-            const scrollRight = document.createElement('img');
-            scrollRight.id = 'scrollRight--carousel-position-3';
-            scrollRight.classList.add('scrollRight');
-            scrollRight.src = 'imgs/nav-arrow-right.svg';
-            scrollRight.alt = 'Mover para a direita';
-            carouselWrapper.appendChild(scrollRight);
+      const carousel = document.createElement("div");
+      carousel.id = "sn--folheto--carousel-position-3";
+      carousel.classList.add("cards-carrossel-folheto-loja-fisica-sn");
+      carouselWrapper.appendChild(carousel);
 
-            container.appendChild(carouselWrapper);
+      const scrollRight = document.createElement("img");
+      scrollRight.id = "scrollRight--carousel-position-3";
+      scrollRight.classList.add("scrollRight");
+      scrollRight.src = "imgs/nav-arrow-right.svg";
+      scrollRight.alt = "Mover para a direita";
+      carouselWrapper.appendChild(scrollRight);
 
-            for (let i = 0; i < rows.length; i++) {
-                const row = rows[i];
+      container.appendChild(carouselWrapper);
 
-                if (row.length === 0) break;
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
 
-                const imageContainer = document.createElement('div');
-                imageContainer.classList.add('image-pagina-folheto-loja-fisica-sn');
-                
-                const image = document.createElement('img');
-                image.classList.add('page-folheto-image');
-                image.src = row[0];
-                image.alt = row[1];
-                image.title = row[2];
-                image.loading = row[3];
+        if (row.length === 0) break;
 
-                // Adicionar o evento de clique para abrir o overlay
-                image.addEventListener('click', () => {
-                    abrirOverlay(image.src);
-                });
+        const imageContainer = document.createElement("div");
+        imageContainer.classList.add("image-pagina-folheto-loja-fisica-sn");
 
-                imageContainer.appendChild(image);
-                carousel.appendChild(imageContainer);
-            }
+        const image = document.createElement("img");
+        image.classList.add("page-folheto-image");
+        image.src = row[0];
+        image.alt = row[1];
+        image.title = row[2];
+        image.loading = row[3];
 
-            scrollLeft.addEventListener('click', () => {
-                carousel.scrollBy({ left: -200, behavior: 'smooth' });
-            });
+        // Adicionar o evento de clique para abrir o overlay
+        image.addEventListener("click", () => {
+          abrirOverlay(image.src);
+        });
 
-            scrollRight.addEventListener('click', () => {
-                carousel.scrollBy({ left: 200, behavior: 'smooth' });
-            });
-        })
-        .catch(error => console.error('Erro ao carregar as imagens do carrossel 3:', error));
+        imageContainer.appendChild(image);
+        carousel.appendChild(imageContainer);
+      }
+
+      scrollLeft.addEventListener("click", () => {
+        carousel.scrollBy({ left: -200, behavior: "smooth" });
+      });
+
+      scrollRight.addEventListener("click", () => {
+        carousel.scrollBy({ left: 200, behavior: "smooth" });
+      });
+    })
+    .catch((error) =>
+      console.error("Erro ao carregar as imagens do carrossel 3:", error)
+    );
 }
 
 // Função para abrir o overlay com a imagem
 function abrirOverlay(src) {
-    const overlay = document.getElementById('image-overlay');
-    const overlayImage = document.getElementById('overlay-image');
-    overlayImage.src = src;
-    overlay.style.display = 'flex'; // Exibe o overlay
+  const overlay = document.getElementById("image-overlay");
+  const overlayImage = document.getElementById("overlay-image");
+  overlayImage.src = src;
+  overlay.style.display = "flex"; // Exibe o overlay
 }
 
 // Fechar o overlay ao clicar fora da imagem ou no botão de fechar
-document.getElementById('close-overlay').addEventListener('click', () => {
-    const overlay = document.getElementById('image-overlay');
-    overlay.style.display = 'none'; // Esconde o overlay ao clicar no botão de fechar
+document.getElementById("close-overlay").addEventListener("click", () => {
+  const overlay = document.getElementById("image-overlay");
+  overlay.style.display = "none"; // Esconde o overlay ao clicar no botão de fechar
 });
 
-document.getElementById('image-overlay').addEventListener('click', (e) => {
-    if (e.target.id === 'image-overlay') {
-        e.target.style.display = 'none'; // Esconde o overlay se o clique for fora da imagem
-    }
+document.getElementById("image-overlay").addEventListener("click", (e) => {
+  if (e.target.id === "image-overlay") {
+    e.target.style.display = "none"; // Esconde o overlay se o clique for fora da imagem
+  }
 });
-
 
 // Função para carregar os dados da planilha
 function carregarDadosFolheto() {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_DATA}?key=${API_KEY}`;
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_DATA}?key=${API_KEY}`;
 
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao buscar dados da planilha');
-            }
-            return response.json();
-        })
-        .then(data => {
-            const dataInDataOut = data.values[0][0]; // Obtém o valor da célula B2
-            inserirConteudo(dataInDataOut);
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-        });
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao buscar dados da planilha");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const dataInDataOut = data.values[0][0]; // Obtém o valor da célula B2
+      inserirConteudo(dataInDataOut);
+    })
+    .catch((error) => {
+      console.error("Erro:", error);
+    });
 
-    // Verificar e inserir links
-    verificarLinks();
+  // Verificar e inserir links
+  verificarLinks();
 }
 
 // Função para verificar os links nas células B5, C5, D5 e adicionar ao HTML
 function verificarLinks() {
-    const urlLinks = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_LINKS}?key=${API_KEY}`;
+  const urlLinks = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_LINKS}?key=${API_KEY}`;
 
-    fetch(urlLinks)
-        .then(response => response.json())
-        .then(data => {
-            const links = data.values[0]; // Array com os valores das células B5, C5 e D5
-            const containerLinks = document.getElementById('row-share-file--lp-folheto-loja-AP');
+  fetch(urlLinks)
+    .then((response) => response.json())
+    .then((data) => {
+      const links = data.values[0]; // Array com os valores das células B5, C5 e D5
+      const containerDownloadLinks = document.getElementById(
+        "row-download-file--lp-folheto-loja-AP"
+      );
+      const containerShareLinks = document.getElementById(
+        "row-share-file--lp-folheto-loja-AP"
+      );
 
-            links.forEach(link => {
-                if (link) { // Verifica se a célula tem conteúdo
-                    // Cria o componente <a>
-                    const linkElement = document.createElement('a');
-                    linkElement.href = link;
+      links.forEach((link) => {
+        if (link) {
+          // Verifica se a célula tem conteúdo
+          // Cria o componente <a>
+          const linkElement = document.createElement("a");
+          linkElement.href = link;
 
-                    // Cria o conteúdo do botão dentro do <a>
-                    const divButton = document.createElement('div');
-                    divButton.className = 'lp-folheto--btn-whatsapp--download';
-                    divButton.innerHTML = `
+          // Cria o conteúdo do botão dentro do <a>
+          const divButton = document.createElement("div");
+          divButton.className = "lp-folheto--btn-whatsapp--download";
+          divButton.innerHTML = `
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none" target="_blank">
                             <path d="M8.36917 11.8693C8.27443 11.9729 8.14057 12.0319 8.00017 12.0319C7.85977 12.0319 7.7259 11.9729 7.63117 11.8693L4.96449 8.95263C4.77815 8.74883 4.79231 8.43257 4.99611 8.24623C5.19992 8.0599 5.51618 8.07403 5.70251 8.27783L7.50017 10.244V2.86523C7.50017 2.58909 7.72403 2.36523 8.00017 2.36523C8.2763 2.36523 8.50017 2.58909 8.50017 2.86523V10.244L10.2978 8.27783C10.4842 8.07403 10.8004 8.0599 11.0042 8.24623C11.208 8.43257 11.2222 8.74883 11.0358 8.95263L8.36917 11.8693Z" fill="white"/>
                             <path d="M2.5 10.8652C2.5 10.5891 2.27615 10.3652 2 10.3652C1.72386 10.3652 1.5 10.5891 1.5 10.8652V10.9018C1.49999 11.8136 1.49997 12.5484 1.57768 13.1264C1.65836 13.7265 1.83095 14.2317 2.23223 14.633C2.63351 15.0343 3.13876 15.2069 3.73883 15.2876C4.31681 15.3652 5.05169 15.3652 5.96342 15.3652H10.0366C10.9483 15.3652 11.6832 15.3652 12.2612 15.2876C12.8613 15.2069 13.3665 15.0343 13.7678 14.633C14.1691 14.2317 14.3417 13.7265 14.4223 13.1264C14.5 12.5484 14.5 11.8136 14.5 10.9018V10.8652C14.5 10.5891 14.2761 10.3652 14 10.3652C13.7239 10.3652 13.5 10.5891 13.5 10.8652C13.5 11.8222 13.4989 12.4896 13.4313 12.9932C13.3655 13.4824 13.2452 13.7414 13.0607 13.9259C12.8761 14.1104 12.6171 14.2307 12.1279 14.2965C11.6243 14.3642 10.9569 14.3652 10 14.3652H6C5.04306 14.3652 4.37565 14.3642 3.87208 14.2965C3.3829 14.2307 3.12385 14.1104 2.93934 13.9259C2.75483 13.7414 2.63453 13.4824 2.56877 12.9932C2.50106 12.4896 2.5 11.8222 2.5 10.8652Z" fill="white"/>
                         </svg>
                     `;
 
-                    // Adiciona o botão ao link
-                    linkElement.appendChild(divButton);
+          // Adiciona o botão ao link
+          linkElement.appendChild(divButton);
 
-                    const shareElement = document.createElement('a');
-                    shareElement.href = `https://api.whatsapp.com/send?text="Baixe o folheto do Apoio Entrega ${link}"`
-                    shareElement.target = '_blank'
-                    shareElement.style = 'justify-content: center;display: flex;'
-                    shareElement.innerHTML = `
-                        <svg width="80" height="32" viewBox="0 0 80 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="1" y="0.5" width="78" height="31" rx="7.5" fill="#E12428"/>
-                            <rect x="1" y="0.5" width="78" height="31" rx="7.5" stroke="#E12428"/>
-                            <path d="M14.9863 18.6289V20H10.4453V18.6289H14.9863ZM11.0195 11.4688V20H9.26172V11.4688H11.0195ZM14.3945 14.9434V16.2793H10.4453V14.9434H14.3945ZM14.9805 11.4688V12.8457H10.4453V11.4688H14.9805ZM22.9551 11.4688V20H21.1973L17.7695 14.2812V20H16.0117V11.4688H17.7695L21.2031 17.1934V11.4688H22.9551ZM27.5605 18.2188L29.5703 11.4688H31.5273L28.5566 20H27.2676L27.5605 18.2188ZM25.709 11.4688L27.7129 18.2188L28.0176 20H26.7168L23.7637 11.4688H25.709ZM34.1934 11.4688V20H32.4414V11.4688H34.1934ZM39.4141 12.9277L37.0938 20H35.2246L38.3945 11.4688H39.584L39.4141 12.9277ZM41.3418 20L39.0156 12.9277L38.8281 11.4688H40.0293L43.2168 20H41.3418ZM41.2363 16.8242V18.2012H36.7305V16.8242H41.2363ZM44.0078 11.4688H47.1895C47.8418 11.4688 48.4023 11.5664 48.8711 11.7617C49.3438 11.957 49.707 12.2461 49.9609 12.6289C50.2148 13.0117 50.3418 13.4824 50.3418 14.041C50.3418 14.498 50.2637 14.8906 50.1074 15.2188C49.9551 15.543 49.7383 15.8145 49.457 16.0332C49.1797 16.248 48.8535 16.4199 48.4785 16.5488L47.9219 16.8418H45.1562L45.1445 15.4707H47.2012C47.5098 15.4707 47.7656 15.416 47.9688 15.3066C48.1719 15.1973 48.3242 15.0449 48.4258 14.8496C48.5312 14.6543 48.584 14.4277 48.584 14.1699C48.584 13.8965 48.5332 13.6602 48.4316 13.4609C48.3301 13.2617 48.1758 13.1094 47.9688 13.0039C47.7617 12.8984 47.502 12.8457 47.1895 12.8457H45.7656V20H44.0078V11.4688ZM48.7773 20L46.832 16.1973L48.6895 16.1855L50.6582 19.918V20H48.7773Z" fill="white"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M65.6277 19.1362L69.9002 15.8767C70.0688 15.7512 70.1667 15.5635 70.1667 15.3652C70.1667 15.1669 70.0688 14.9793 69.9002 14.8537L65.6277 11.5942C65.3998 11.4169 65.0809 11.3735 64.8059 11.4823C64.531 11.5911 64.3483 11.8331 64.3353 12.1057V13.3913C58.3372 12.4455 56.8333 17.3313 56.8333 20.0898C58.2248 17.9884 61.8305 14.1793 64.3353 17.3313V18.6204C64.3466 18.8938 64.5286 19.1373 64.8038 19.2471C65.0792 19.357 65.3992 19.3139 65.6277 19.1362Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    `;
+          // Adiciona o link ao container
+          containerDownloadLinks.appendChild(linkElement);
+        }
+      });
 
-                    // Adiciona o link ao container
-                    containerLinks.appendChild(shareElement);
-                    containerLinks.appendChild(linkElement);
-                }
-            });
-        })
-        .catch(error => console.error('Erro ao verificar links:', error));
+      const shareElement = document.createElement("a");
+      shareElement.href =
+        "https://api.whatsapp.com/send?text=Ofertas imperdíveis te esperam! Baixe agora o folheto do Apoio Entrega e garanta os melhores preços! https://www.apoioentrega.com/folheto-loja-fisica";
+      shareElement.target = "_blank";
+      shareElement.className = "lp-folheto--btn-whatsapp--share";
+      shareElement.innerHTML = `
+        <svg width="133" height="32" viewBox="0 0 133 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="0.5" width="131" height="31" rx="7.5" fill="#E12428"/>
+        <rect x="1" y="0.5" width="131" height="31" rx="7.5" stroke="#E12428"/>
+        <path d="M16.707 17.1699H18.459C18.4238 17.7441 18.2656 18.2539 17.9844 18.6992C17.707 19.1445 17.3184 19.4922 16.8184 19.7422C16.3223 19.9922 15.7246 20.1172 15.0254 20.1172C14.4785 20.1172 13.9883 20.0234 13.5547 19.8359C13.1211 19.6445 12.75 19.3711 12.4414 19.0156C12.1367 18.6602 11.9043 18.2305 11.7441 17.7266C11.584 17.2227 11.5039 16.6582 11.5039 16.0332V15.4414C11.5039 14.8164 11.5859 14.252 11.75 13.748C11.918 13.2402 12.1562 12.8086 12.4648 12.4531C12.7773 12.0977 13.1504 11.8242 13.584 11.6328C14.0176 11.4414 14.502 11.3457 15.0371 11.3457C15.748 11.3457 16.3477 11.4746 16.8359 11.7324C17.3281 11.9902 17.709 12.3457 17.9785 12.7988C18.252 13.252 18.416 13.7676 18.4707 14.3457H16.7129C16.6934 14.002 16.625 13.7109 16.5078 13.4727C16.3906 13.2305 16.2129 13.0488 15.9746 12.9277C15.7402 12.8027 15.4277 12.7402 15.0371 12.7402C14.7441 12.7402 14.4883 12.7949 14.2695 12.9043C14.0508 13.0137 13.8672 13.1797 13.7188 13.4023C13.5703 13.625 13.459 13.9062 13.3848 14.2461C13.3145 14.582 13.2793 14.9766 13.2793 15.4297V16.0332C13.2793 16.4746 13.3125 16.8633 13.3789 17.1992C13.4453 17.5312 13.5469 17.8125 13.6836 18.043C13.8242 18.2695 14.0039 18.4414 14.2227 18.5586C14.4453 18.6719 14.7129 18.7285 15.0254 18.7285C15.3926 18.7285 15.6953 18.6699 15.9336 18.5527C16.1719 18.4355 16.3535 18.2617 16.4785 18.0312C16.6074 17.8008 16.6836 17.5137 16.707 17.1699ZM26.6211 15.5352V15.9395C26.6211 16.5879 26.5332 17.1699 26.3574 17.6855C26.1816 18.2012 25.9336 18.6406 25.6133 19.0039C25.293 19.3633 24.9102 19.6387 24.4648 19.8301C24.0234 20.0215 23.5332 20.1172 22.9941 20.1172C22.459 20.1172 21.9688 20.0215 21.5234 19.8301C21.082 19.6387 20.6992 19.3633 20.375 19.0039C20.0508 18.6406 19.7988 18.2012 19.6191 17.6855C19.4434 17.1699 19.3555 16.5879 19.3555 15.9395V15.5352C19.3555 14.8828 19.4434 14.3008 19.6191 13.7891C19.7949 13.2734 20.043 12.834 20.3633 12.4707C20.6875 12.1074 21.0703 11.8301 21.5117 11.6387C21.957 11.4473 22.4473 11.3516 22.9824 11.3516C23.5215 11.3516 24.0117 11.4473 24.4531 11.6387C24.8984 11.8301 25.2812 12.1074 25.6016 12.4707C25.9258 12.834 26.1758 13.2734 26.3516 13.7891C26.5312 14.3008 26.6211 14.8828 26.6211 15.5352ZM24.8457 15.9395V15.5234C24.8457 15.0703 24.8047 14.6719 24.7227 14.3281C24.6406 13.9844 24.5195 13.6953 24.3594 13.4609C24.1992 13.2266 24.0039 13.0508 23.7734 12.9336C23.543 12.8125 23.2793 12.752 22.9824 12.752C22.6855 12.752 22.4219 12.8125 22.1914 12.9336C21.9648 13.0508 21.7715 13.2266 21.6113 13.4609C21.4551 13.6953 21.3359 13.9844 21.2539 14.3281C21.1719 14.6719 21.1309 15.0703 21.1309 15.5234V15.9395C21.1309 16.3887 21.1719 16.7871 21.2539 17.1348C21.3359 17.4785 21.457 17.7695 21.6172 18.0078C21.7773 18.2422 21.9727 18.4199 22.2031 18.541C22.4336 18.6621 22.6973 18.7227 22.9941 18.7227C23.291 18.7227 23.5547 18.6621 23.7852 18.541C24.0156 18.4199 24.209 18.2422 24.3652 18.0078C24.5215 17.7695 24.6406 17.4785 24.7227 17.1348C24.8047 16.7871 24.8457 16.3887 24.8457 15.9395ZM28.6895 11.4688H30.1777L32.3691 17.7324L34.5605 11.4688H36.0488L32.9668 20H31.7715L28.6895 11.4688ZM27.8867 11.4688H29.3691L29.6387 17.5742V20H27.8867V11.4688ZM35.3691 11.4688H36.8574V20H35.0996V17.5742L35.3691 11.4688ZM41.7207 16.959H39.5469V15.5879H41.7207C42.0566 15.5879 42.3301 15.5332 42.541 15.4238C42.752 15.3105 42.9062 15.1543 43.0039 14.9551C43.1016 14.7559 43.1504 14.5312 43.1504 14.2812C43.1504 14.0273 43.1016 13.791 43.0039 13.5723C42.9062 13.3535 42.752 13.1777 42.541 13.0449C42.3301 12.9121 42.0566 12.8457 41.7207 12.8457H40.1562V20H38.3984V11.4688H41.7207C42.3887 11.4688 42.9609 11.5898 43.4375 11.832C43.918 12.0703 44.2852 12.4004 44.5391 12.8223C44.793 13.2441 44.9199 13.7266 44.9199 14.2695C44.9199 14.8203 44.793 15.2969 44.5391 15.6992C44.2852 16.1016 43.918 16.4121 43.4375 16.6309C42.9609 16.8496 42.3887 16.959 41.7207 16.959ZM48.6289 12.9277L46.3086 20H44.4395L47.6094 11.4688H48.7988L48.6289 12.9277ZM50.5566 20L48.2305 12.9277L48.043 11.4688H49.2441L52.4316 20H50.5566ZM50.4512 16.8242V18.2012H45.9453V16.8242H50.4512ZM53.2227 11.4688H56.4043C57.0566 11.4688 57.6172 11.5664 58.0859 11.7617C58.5586 11.957 58.9219 12.2461 59.1758 12.6289C59.4297 13.0117 59.5566 13.4824 59.5566 14.041C59.5566 14.498 59.4785 14.8906 59.3223 15.2188C59.1699 15.543 58.9531 15.8145 58.6719 16.0332C58.3945 16.248 58.0684 16.4199 57.6934 16.5488L57.1367 16.8418H54.3711L54.3594 15.4707H56.416C56.7246 15.4707 56.9805 15.416 57.1836 15.3066C57.3867 15.1973 57.5391 15.0449 57.6406 14.8496C57.7461 14.6543 57.7988 14.4277 57.7988 14.1699C57.7988 13.8965 57.748 13.6602 57.6465 13.4609C57.5449 13.2617 57.3906 13.1094 57.1836 13.0039C56.9766 12.8984 56.7168 12.8457 56.4043 12.8457H54.9805V20H53.2227V11.4688ZM57.9922 20L56.0469 16.1973L57.9043 16.1855L59.873 19.918V20H57.9922ZM64.373 11.4688V20H62.6211V11.4688H64.373ZM66.998 11.4688V12.8457H60.0371V11.4688H66.998ZM69.8691 11.4688V20H68.1172V11.4688H69.8691ZM77 18.6289V20H72.7051V18.6289H77ZM73.2734 11.4688V20H71.5156V11.4688H73.2734ZM83.6973 14.9434V16.3145H79.2441V14.9434H83.6973ZM79.7656 11.4688V20H78.0078V11.4688H79.7656ZM84.9512 11.4688V20H83.1992V11.4688H84.9512ZM90.0547 12.9277L87.7344 20H85.8652L89.0352 11.4688H90.2246L90.0547 12.9277ZM91.9824 20L89.6562 12.9277L89.4688 11.4688H90.6699L93.8574 20H91.9824ZM91.877 16.8242V18.2012H87.3711V16.8242H91.877ZM94.6484 11.4688H97.8301C98.4824 11.4688 99.043 11.5664 99.5117 11.7617C99.9844 11.957 100.348 12.2461 100.602 12.6289C100.855 13.0117 100.982 13.4824 100.982 14.041C100.982 14.498 100.904 14.8906 100.748 15.2188C100.596 15.543 100.379 15.8145 100.098 16.0332C99.8203 16.248 99.4941 16.4199 99.1191 16.5488L98.5625 16.8418H95.7969L95.7852 15.4707H97.8418C98.1504 15.4707 98.4062 15.416 98.6094 15.3066C98.8125 15.1973 98.9648 15.0449 99.0664 14.8496C99.1719 14.6543 99.2246 14.4277 99.2246 14.1699C99.2246 13.8965 99.1738 13.6602 99.0723 13.4609C98.9707 13.2617 98.8164 13.1094 98.6094 13.0039C98.4023 12.8984 98.1426 12.8457 97.8301 12.8457H96.4062V20H94.6484V11.4688ZM99.418 20L97.4727 16.1973L99.3301 16.1855L101.299 19.918V20H99.418Z" fill="white"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M116.128 19.1362L120.4 15.8767C120.569 15.7512 120.667 15.5635 120.667 15.3652C120.667 15.1669 120.569 14.9793 120.4 14.8537L116.128 11.5942C115.9 11.4169 115.581 11.3735 115.306 11.4823C115.031 11.5911 114.848 11.8331 114.836 12.1057V13.3913C108.837 12.4455 107.333 17.3313 107.333 20.0898C108.725 17.9884 112.331 14.1793 114.836 17.3313V18.6204C114.847 18.8938 115.029 19.1373 115.304 19.2471C115.579 19.357 115.899 19.3139 116.128 19.1362Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      `;
+      containerShareLinks.appendChild(shareElement);
+    })
+    .catch((error) => console.error("Erro ao verificar links:", error));
 }
 
 // Função para inserir o conteúdo no HTML
 function inserirConteudo(dataInDataOut) {
-    const container = document.getElementById('lp-folheto-AP_DataInDataOut');
+  const container = document.getElementById("lp-folheto-AP_DataInDataOut");
 
-    if (container) {
-        const lojaLabel = document.createElement('p');
-        lojaLabel.className = 'text-lp-label-small';
-        lojaLabel.textContent = 'Loja física';
+  if (container) {
+    const lojaLabel = document.createElement("p");
+    lojaLabel.className = "text-lp-label-small";
+    lojaLabel.textContent = "Loja física";
 
-        const ofertasTitulo = document.createElement('h1');
-        ofertasTitulo.className = 'text-lp';
-        ofertasTitulo.textContent = 'Ofertas do folheto Apoio Mineiro';
+    const ofertasTitulo = document.createElement("h1");
+    ofertasTitulo.className = "text-lp";
+    ofertasTitulo.textContent = "Ofertas do folheto Apoio Mineiro";
 
-        const ofertasData = document.createElement('p');
-        ofertasData.className = 'text-lp-label-small';
-        ofertasData.textContent = `${dataInDataOut}`;
+    const ofertasData = document.createElement("p");
+    ofertasData.className = "text-lp-label-small";
+    ofertasData.textContent = `${dataInDataOut}`;
 
-        // Insere os elementos no container
-        container.appendChild(lojaLabel);
-        container.appendChild(ofertasTitulo);
-        container.appendChild(ofertasData);
-    } else {
-        console.error('Elemento com id "lp-folheto-AP_DataInDataOut" não encontrado');
-    }
+    // Insere os elementos no container
+    container.appendChild(lojaLabel);
+    container.appendChild(ofertasTitulo);
+    container.appendChild(ofertasData);
+  } else {
+    console.error(
+      'Elemento com id "lp-folheto-AP_DataInDataOut" não encontrado'
+    );
+  }
 }
 
 // Função para verificar o conteúdo da célula D9 e aplicar as ações necessárias
 function verificarConteudoVideoVT() {
-    const RANGE_VIDEO_VT = 'page-content!D9'; // Célula D9
-    const urlVideoVT = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_VIDEO_VT}?key=${API_KEY}`;
-    
-    fetch(urlVideoVT)
-        .then(response => response.json())
-        .then(data => {
-            const videoVTContent = data.values ? data.values[0][0] : ''; // Pega o valor da célula D9
+  const RANGE_VIDEO_VT = "page-content!D9"; // Célula D9
+  const urlVideoVT = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_VIDEO_VT}?key=${API_KEY}`;
 
-            const videoContainer = document.getElementById('lp-folheto-AP--block-vt-YT');
-            const videoElement = document.getElementById('lp-folheto-AP_VideoVT');
+  fetch(urlVideoVT)
+    .then((response) => response.json())
+    .then((data) => {
+      const videoVTContent = data.values ? data.values[0][0] : ""; // Pega o valor da célula D9
 
-            if (!videoVTContent) {
-                // Se a célula estiver vazia, ocultar o elemento e zerar padding
-                videoContainer.style.display = 'none';
-                videoContainer.style.padding = '0';
-            } else {
-                // Se houver conteúdo, inserir no elemento de vídeo
-                videoElement.innerHTML = videoVTContent;
-            }
-        })
-        .catch(error => console.error('Erro ao buscar conteúdo de vídeo VT:', error));
+      const videoContainer = document.getElementById(
+        "lp-folheto-AP--block-vt-YT"
+      );
+      const videoElement = document.getElementById("lp-folheto-AP_VideoVT");
+
+      if (!videoVTContent) {
+        // Se a célula estiver vazia, ocultar o elemento e zerar padding
+        videoContainer.style.display = "none";
+        videoContainer.style.padding = "0";
+      } else {
+        // Se houver conteúdo, inserir no elemento de vídeo
+        videoElement.innerHTML = videoVTContent;
+      }
+    })
+    .catch((error) =>
+      console.error("Erro ao buscar conteúdo de vídeo VT:", error)
+    );
 }
 
 // Função para verificar o conteúdo das células B14:B17 e alimentar as estruturas do HTML
 function verificarConteudoCoupon() {
-    const RANGE_COUPON = 'page-content!B14:B17'; // Intervalo B14:B17
-    const urlCoupon = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_COUPON}?key=${API_KEY}`;
-    
-    fetch(urlCoupon)
-        .then(response => response.json())
-        .then(data => {
-            const values = data.values || [];
-            
-            // Elementos HTML que receberão o conteúdo das células
-            const titleElement = document.getElementById('lp-folheto-AP_titleCoupon');
-            const subtitleElement = document.getElementById('lp-folheto-AP_subtitleCoupon');
-            const firstOrderElement = document.getElementById('lp-folheto-AP_CouponFirstOrder');
-            const supportingTextElement = document.getElementById('lp-folheto-AP_supporting-text');
-            const clubeApoioElement = document.getElementById('lp-folheto-AP--clube-apoio');
-            
-            // Atribuindo valores às variáveis, considerando se existem dados
-            const titleCoupon = values[0] ? values[0][0] : '';
-            const subtitleCoupon = values[1] ? values[1][0] : '';
-            const couponFirstOrder = values[2] ? values[2][0] : '';
-            const supportingText = values[3] ? values[3][0] : '';
+  const RANGE_COUPON = "page-content!B14:B17"; // Intervalo B14:B17
+  const urlCoupon = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_COUPON}?key=${API_KEY}`;
 
-            // Insere conteúdo nos elementos HTML
-            if (titleCoupon) {
-                titleElement.textContent = titleCoupon;
-            }
-            if (subtitleCoupon) {
-                subtitleElement.textContent = subtitleCoupon;
-            }
-            if (couponFirstOrder) {
-                firstOrderElement.textContent = couponFirstOrder;
-            }
-            if (supportingText) {
-                supportingTextElement.textContent = supportingText;
-            }
+  fetch(urlCoupon)
+    .then((response) => response.json())
+    .then((data) => {
+      const values = data.values || [];
 
-            // Verifica se alguma célula está vazia e oculta o elemento 'lp-folheto-AP--clube-apoio'
-            if (!titleCoupon || !subtitleCoupon || !couponFirstOrder || !supportingText) {
-                clubeApoioElement.style.display = 'none';
-            }
-        })
-        .catch(error => console.error('Erro ao buscar dados do cupom:', error));
+      // Elementos HTML que receberão o conteúdo das células
+      const titleElement = document.getElementById("lp-folheto-AP_titleCoupon");
+      const subtitleElement = document.getElementById(
+        "lp-folheto-AP_subtitleCoupon"
+      );
+      const firstOrderElement = document.getElementById(
+        "lp-folheto-AP_CouponFirstOrder"
+      );
+      const supportingTextElement = document.getElementById(
+        "lp-folheto-AP_supporting-text"
+      );
+      const clubeApoioElement = document.getElementById(
+        "lp-folheto-AP--clube-apoio"
+      );
+
+      // Atribuindo valores às variáveis, considerando se existem dados
+      const titleCoupon = values[0] ? values[0][0] : "";
+      const subtitleCoupon = values[1] ? values[1][0] : "";
+      const couponFirstOrder = values[2] ? values[2][0] : "";
+      const supportingText = values[3] ? values[3][0] : "";
+
+      // Insere conteúdo nos elementos HTML
+      if (titleCoupon) {
+        titleElement.textContent = titleCoupon;
+      }
+      if (subtitleCoupon) {
+        subtitleElement.textContent = subtitleCoupon;
+      }
+      if (couponFirstOrder) {
+        firstOrderElement.textContent = couponFirstOrder;
+      }
+      if (supportingText) {
+        supportingTextElement.textContent = supportingText;
+      }
+
+      // Verifica se alguma célula está vazia e oculta o elemento 'lp-folheto-AP--clube-apoio'
+      if (
+        !titleCoupon ||
+        !subtitleCoupon ||
+        !couponFirstOrder ||
+        !supportingText
+      ) {
+        clubeApoioElement.style.display = "none";
+      }
+    })
+    .catch((error) => console.error("Erro ao buscar dados do cupom:", error));
 }
 
 function carregarStores() {
-    // Configurar a URL da API do Google Sheets
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_STORES}?key=${API_KEY}`;
+  // Configurar a URL da API do Google Sheets
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE_STORES}?key=${API_KEY}`;
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            const rows = data.values;
-            const container = document.getElementById('lp-folheto-AP--carousel-itens');
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      const rows = data.values;
+      const container = document.getElementById(
+        "lp-folheto-AP--carousel-itens"
+      );
 
-            // Loop através das linhas da planilha
-            for (let i = 0; i < rows.length; i++) {
-                const row = rows[i];
+      // Loop através das linhas da planilha
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
 
-                // Verificar se a linha não está vazia
-                if (row.length === 0) {
-                    break; // Para se encontrar uma linha vazia
-                }
+        // Verificar se a linha não está vazia
+        if (row.length === 0) {
+          break; // Para se encontrar uma linha vazia
+        }
 
-                // Criar o elemento do card da loja
-                const card = document.createElement('div');
-                card.classList.add('avaliable-store--card');
+        // Criar o elemento do card da loja
+        const card = document.createElement("div");
+        card.classList.add("avaliable-store--card");
 
-                // Preencher os dados da loja
-                card.innerHTML = `
+        // Preencher os dados da loja
+        card.innerHTML = `
                     
                     <div class="image-store">
                         <div class="lp-folheto-AP--image-store"><img id=lp-folheto-AP_image-store src="${row[0]}"></div>
@@ -510,12 +542,13 @@ function carregarStores() {
                 
                 `;
 
-                // Adicionar o card à div do contêiner
-                container.appendChild(card);
-            }
-        })
-        .catch(error => console.error('Erro ao carregar os dados das lojas:', error));
+        // Adicionar o card à div do contêiner
+        container.appendChild(card);
+      }
+    })
+    .catch((error) =>
+      console.error("Erro ao carregar os dados das lojas:", error)
+    );
 }
 
 function criarCardsDeLojas() {}
-
