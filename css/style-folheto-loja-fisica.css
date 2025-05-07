@@ -2503,7 +2503,7 @@
     flex: 1 0 0;
   }
   .row-share-file .text p.text-lp-paragraph {
-    align-self: stretch;
+    text-align: center;
   }
   .row-share-file a {
     text-decoration: none;
